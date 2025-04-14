@@ -135,6 +135,11 @@ class KMeans:
             history.append(new_objective)
             self.snapshots.append(assignments)
 
+        # for i, snapshot in enumerate(self.snapshots, start=1):
+        #     plt.title(f'iteration_{i}, objective = {history[i - 1]}')
+        #     plt.scatter(X[:, 0], X[:, 1], c=snapshot)
+        #     plt.show()
+
         return history
 
     def predict(self, X):
