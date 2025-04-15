@@ -162,12 +162,28 @@ def evaluate_clustering(trained_model, X, labels):
     confusion_matrix = np.zeros((5, 5))
     boolean_matrix_X = np.zeros((5, 5))
     clusters = trained_model.predict(X)
-    # Workspace I.7
-    # BEGIN
-    # code here
 
-    # END
-    return accuracy
+    # Workspace I.7
+
+    n, = labels.shape
+
+    cluster_sets = dict([(x, set()) for x in range(5)])
+    class_sets = dict([(x, set()) for x in range(5)])
+
+    for i in range(n):
+        cluster_sets[clusters[i]].add(i)
+        class_sets[labels[i]].add(i)
+
+    for i in range(5):
+        for j in range(5):
+            confusion_matrix[i, j] = len(cluster_sets[j] & class_sets[i])
+
+    label_mappping, cluster_mapping = linear_sum_assignment(confusion_matrix, maximize=True)
+
+    for i in range(5):
+        boolean_matrix_X[label_mappping[i], cluster_mapping[i]] = 1
+
+    return (confusion_matrix * boolean_matrix_X).sum() / confusion_matrix.sum()
 
 
 def main():
