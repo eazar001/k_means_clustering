@@ -197,20 +197,15 @@ def main():
     # plt.show()
 
     k_means = KMeans(5)
-    objective_history = k_means.fit(multi_blobs.X)
-    print(f'history: {objective_history}\niterations: {len(objective_history)}')
-
-    for i, snapshot in enumerate(k_means.snapshots, start=1):
-        plt.title(f'iteration_{i}')
-        plt.scatter(multi_blobs.X[:, 0], multi_blobs.X[:, 1], c=snapshot)
-        plt.savefig(f'iteration_{i}')
-
-    inp = np.array([[-8.2, 4.2],
-                    [3.5, 1.2]])
-
-    predictions = k_means.predict(inp)
 
     accuracies = []
+
+    for _ in range(20):
+        k_means.fit(multi_blobs.X)
+        accuracies.append(evaluate_clustering(k_means, multi_blobs.X, multi_blobs.labels))
+
+    for accuracy in accuracies:
+        print(accuracy)
 
 
 if __name__ == '__main__':
